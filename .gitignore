@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Terraform
+**/.terraform/
+*.tfstate*
+.crash
+.override.tf
+.terraform.lock.hcl
+
+# IDEs
+.vscode/
+.idea/
+
+# MacOS
+.DS_Store
