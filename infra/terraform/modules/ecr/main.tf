@@ -1,3 +1,4 @@
+
 locals {
   default_lifecycle = jsonencode({
     rules = [

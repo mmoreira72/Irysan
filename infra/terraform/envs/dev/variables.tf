@@ -7,7 +7,7 @@ variable "region" {
 variable "cluster_name" {
   description = "EKS cluster name"
   type        = string
-  default     = "hello-eks-fargate"
+  default     = "hello-eks"
 }
 
 variable "vpc_cidr" {
@@ -63,3 +63,11 @@ variable "ecr_repo_name" {
   type        = string
   default     = "hello-app"
 }
+
+
+variable "aws_region" {
+  description = "AWS region to deploy resources"
+  type        = string
+  default     = "us-east-1"
+}
+

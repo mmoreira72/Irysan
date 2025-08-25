@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: hello-app
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: { .Values.replicaCount }
   selector:
     matchLabels:
       app.kubernetes.io/name: hello-app
@@ -16,13 +16,13 @@ spec:
     spec:
       containers:
         - name: hello-app
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{ .Values.image.repository }:{ .Values.image.tag }"
+          imagePullPolicy: { .Values.image.pullPolicy }
           ports:
             - containerPort: 8080
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            {- toYaml .Values.livenessProbe | nindent 12 }
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            {- toYaml .Values.readinessProbe | nindent 12 }
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {- toYaml .Values.resources | nindent 12 }
