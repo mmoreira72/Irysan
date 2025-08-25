@@ -7,7 +7,7 @@ variable "region" {
 variable "cluster_name" {
   description = "EKS cluster name"
   type        = string
-  default     = "hello-eks"
+  default     = "hello-eks-fargate"
 }
 
 variable "vpc_cidr" {

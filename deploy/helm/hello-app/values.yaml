@@ -37,3 +37,6 @@ hpa:
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70
+
+
+irsaRoleArn: ""  # Fill this with the output from Terraform
