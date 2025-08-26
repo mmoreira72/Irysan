@@ -40,10 +40,6 @@ hpa:
 
 irsaRoleArn: "arn:aws:iam::740092415723:role/eks-cloudwatch-reader"  # Fill this with the output from Terraform
 
-cwagent:
-  enabled: true
-  replicas: 1
-  image: "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:latest"
-  imagePullPolicy: IfNotPresent
+awsRegion: "eu-west-1"
 
 clusterName: "eks-dev"
