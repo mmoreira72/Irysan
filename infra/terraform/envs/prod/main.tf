@@ -14,7 +14,7 @@ module "vpc" {
   azs             = slice(data.aws_availability_zones.available.names, 0, 3)
   public_subnets  = var.public_subnet_cidrs
   private_subnets = var.private_subnet_cidrs
-  enable_nat_gateway = true
+  enable_nat_gateway = false
   single_nat_gateway = true
   tags = local.common_tags
 }
