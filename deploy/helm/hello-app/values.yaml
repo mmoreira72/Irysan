@@ -1,7 +1,7 @@
 replicaCount: 2
 
 image:
-  repository: CHANGEME_IN_PIPELINE
+  repository: 740092415723.dkr.ecr.eu-west-1.amazonaws.com/app
   tag: "latest"
   pullPolicy: IfNotPresent
 
