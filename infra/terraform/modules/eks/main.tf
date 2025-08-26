@@ -9,15 +9,16 @@ module "eks" {
   subnet_ids = var.subnet_ids
 
   fargate_profiles = {
-    default = {
-      name = "default"
-      selectors = [
-        {
-          namespace = "default"
-        }
-      ]
-    }
+  default = {
+    name = "default"
+    selectors = [{ namespace = "default" }]
   }
+  coredns = {
+    name = "kube-system"
+    selectors = [{ namespace = "kube-system" }]
+  }
+}
+
 
   enable_irsa = true
 }

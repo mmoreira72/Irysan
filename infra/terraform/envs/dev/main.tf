@@ -55,7 +55,12 @@ module "eks" {
       name = "default"
       selectors = [{ namespace = "default" }]
     }
+    coredns = {
+      name = "kube-system"
+      selectors = [{ namespace = "kube-system" }]
+    }
   }
+
   tags = local.common_tags
 }
 
