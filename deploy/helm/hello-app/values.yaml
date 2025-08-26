@@ -38,11 +38,12 @@ hpa:
   maxReplicas: 3
   targetCPUUtilizationPercentage: 70
 
-irsaRoleArn: ""  # Fill this with the output from Terraform
+irsaRoleArn: "arn:aws:iam::740092415723:role/eks-cloudwatch-reader"  # Fill this with the output from Terraform
 
 cwagent:
   enabled: true
-  replicas: 1         # use a DaemonSet if you want node/pod metrics
+  replicas: 1
   image: "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:latest"
   imagePullPolicy: IfNotPresent
-  resources: {}
+
+clusterName: "eks-dev"

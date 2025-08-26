@@ -7,7 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}-metrics-reader
 spec:
-  replicas: {{ .Values.cwagent.replicas }}
+  replicas: {{ .Values.cwagent.replicas | default 1 }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ .Release.Name }}-metrics-reader
@@ -19,17 +19,14 @@ spec:
       serviceAccountName: metrics-reader
       containers:
         - name: cloudwatch-agent
-          image: {{ .Values.cwagent.image | quote }}
-          imagePullPolicy: {{ .Values.cwagent.imagePullPolicy }}
+          image: {{ .Values.cwagent.image | default "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:latest" | quote }}
+          imagePullPolicy: {{ .Values.cwagent.imagePullPolicy | default "IfNotPresent" }}
           command: ["/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent"]
-          args: ["-config", "file:/etc/cwagentconfig/cwagentconfig.json"]
+          # Either style below works; keep one (no need for "file:" prefix)
+          args: ["-config", "/etc/cwagentconfig/cwagentconfig.json"]
           volumeMounts:
             - name: cwagent-config
               mountPath: /etc/cwagentconfig
-          {{- with .Values.cwagent.resources }}
-          resources:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
       volumes:
         - name: cwagent-config
           configMap:
