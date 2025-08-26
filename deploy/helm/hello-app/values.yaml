@@ -34,9 +34,15 @@ readinessProbe:
 
 hpa:
   enabled: true
-  minReplicas: 2
-  maxReplicas: 10
+  minReplicas: 1
+  maxReplicas: 3
   targetCPUUtilizationPercentage: 70
 
-
 irsaRoleArn: ""  # Fill this with the output from Terraform
+
+cwagent:
+  enabled: true
+  replicas: 1         # use a DaemonSet if you want node/pod metrics
+  image: "public.ecr.aws/aws-observability/cloudwatch-agent:latest"
+  imagePullPolicy: IfNotPresent
+  resources: {}

@@ -1,27 +1,40 @@
+{{- if .Values.cwagent.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: metrics-reader
-  namespace: default
+  name: {{ .Release.Name }}-metrics-reader
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-metrics-reader
 spec:
-  replicas: 1
+  replicas: {{ .Values.cwagent.replicas }}
   selector:
     matchLabels:
-      app: metrics-reader
+      app.kubernetes.io/name: {{ .Release.Name }}-metrics-reader
   template:
     metadata:
       labels:
-        app: metrics-reader
+        app.kubernetes.io/name: {{ .Release.Name }}-metrics-reader
     spec:
       serviceAccountName: metrics-reader
       containers:
-        - name: metrics-reader
-          image: public.ecr.aws/aws-observability/cloudwatch-agent:latest
-          command: ["/opt/aws/amazon-cloudwatch-agent/bin/start-amazon-cloudwatch-agent"]
+        - name: cloudwatch-agent
+          image: {{ .Values.cwagent.image | quote }}
+          imagePullPolicy: {{ .Values.cwagent.imagePullPolicy }}
+          command: ["/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent"]
+          args: ["-config", "file:/etc/cwagentconfig/cwagentconfig.json"]
           volumeMounts:
             - name: cwagent-config
               mountPath: /etc/cwagentconfig
+          {{- with .Values.cwagent.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       volumes:
         - name: cwagent-config
           configMap:
             name: cwagent-config
+            items:
+              - key: cwagentconfig.json
+                path: cwagentconfig.json
+{{- end }}

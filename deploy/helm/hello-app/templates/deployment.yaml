@@ -1,28 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-app
+  name: {{ include "hello-app.fullname" . | default "hello-app" }}
   labels:
-    app.kubernetes.io/name: hello-app
+    app.kubernetes.io/name: {{ include "hello-app.name" . | default "hello-app" }}
 spec:
-  replicas: { .Values.replicaCount }
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: hello-app
+      app.kubernetes.io/name: {{ include "hello-app.name" . | default "hello-app" }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: hello-app
+        app.kubernetes.io/name: {{ include "hello-app.name" . | default "hello-app" }}
     spec:
       containers:
-        - name: hello-app
-          image: "{ .Values.image.repository }:{ .Values.image.tag }"
-          imagePullPolicy: { .Values.image.pullPolicy }
+        - name: {{ include "hello-app.name" . | default "hello-app" }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8080
+          {{- with .Values.livenessProbe }}
           livenessProbe:
-            {- toYaml .Values.livenessProbe | nindent 12 }
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
           readinessProbe:
-            {- toYaml .Values.readinessProbe | nindent 12 }
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
           resources:
-            {- toYaml .Values.resources | nindent 12 }
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
