@@ -43,6 +43,6 @@ irsaRoleArn: ""  # Fill this with the output from Terraform
 cwagent:
   enabled: true
   replicas: 1         # use a DaemonSet if you want node/pod metrics
-  image: "public.ecr.aws/aws-observability/cloudwatch-agent:latest"
+  image: "public.ecr.aws/cloudwatch-agent/cloudwatch-agent:latest"
   imagePullPolicy: IfNotPresent
   resources: {}

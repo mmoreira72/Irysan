@@ -17,3 +17,8 @@ output "kubectl_update_command" {
   description = "Command to update kubeconfig"
   value       = "aws eks update-kubeconfig --region ${var.region} --name ${module.eks.cluster_name}"
 }
+
+output "irsa_role_arn" {
+  value       = module.cloudwatch_iam_role.role_arn
+  description = "IRSA role ARN for metrics-reader"
+}

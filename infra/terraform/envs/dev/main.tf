@@ -59,9 +59,19 @@ module "eks" {
   tags = local.common_tags
 }
 
-# Dados do cluster PARA configurar o provider kubernetes
+# Get cluster details (includes OIDC issuer URL)
 data "aws_eks_cluster" "this" {
   name = module.eks.cluster_name
+}
+
+# Your AWS account (to build the provider ARN)
+data "aws_caller_identity" "current" {}
+
+# Derive issuer host and provider ARN
+locals {
+  oidc_issuer_url  = data.aws_eks_cluster.this.identity[0].oidc[0].issuer
+  oidc_issuer_host = replace(local.oidc_issuer_url, "https://", "")
+  oidc_provider_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${local.oidc_issuer_host}"
 }
 
 data "aws_eks_cluster_auth" "this" {
@@ -102,4 +112,15 @@ module "aws_auth" {
   providers = {
     kubernetes = kubernetes.eks   # <<< referencia explícita
   }
+}
+
+module "cloudwatch_iam_role" {
+  source              = "../../modules/cloudwatch_iam_role"
+  role_name           = "eks-cloudwatch-reader"
+  namespace           = "default"
+  service_account     = "metrics-reader"
+
+  oidc_provider_url = local.oidc_issuer_url
+  oidc_provider_arn = local.oidc_provider_arn
+  tags                = local.common_tags
 }
